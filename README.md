@@ -22,3 +22,8 @@ manage.py main file to run the project
 
 Create new app in our main project
 >python manage.py startapp geniojobsapp
+>python manage.py createsuperuser
+Username (leave blank to use 's'): shila
+Email address: shila@gmail.com
+Password: shila@1
+Password (again):shila@1
