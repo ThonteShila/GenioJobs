@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.template import RequestContext
 from geniojobsapp.models import Data,student,Grade,GenioUsers
 from django.http import HttpResponse
 from django.contrib.auth.models import User  
+
 # Create your views here.
 
 def grade_function(request):
@@ -47,11 +48,14 @@ def add_stud(request):
                 return render(request, 'add_stud.html',context)
         else:
                 return HttpResponse("Else and handled, studnot Added.")
-        
+
+def get_resource(self):    
+        print("inside home")
+        return "my resource"
 
 def home(request):
+        print("inside home")
         return render(request,'home.html',{})
-
 def employer_login(request):
         data=Data()
         data.name='Employer Login'
@@ -78,7 +82,7 @@ def employer_login(request):
                                 login_success=False
                                 break
                 if login_success==True:
-                        return render(request,"employer_dashboard.html",{'message':message})      
+                        return redirect('../employer_dashboard', {'message':message})
                 else:
                         return render(request,"login.html",{'message':message})                              
         
@@ -88,7 +92,6 @@ def employer_login(request):
  
         print("message:","out")
         return render(request,"login.html",{'data':data})                  
-
 def jobseeker_login(request):
         data=Data()
         data.name='Job Seeker Login'
@@ -125,8 +128,6 @@ def jobseeker_login(request):
  
         print("message:","out")
         return render(request,"login.html",{'data':data})                  
-
-
 def employer_new(request):
         data=Data()
         data.name='Employer'
@@ -151,7 +152,6 @@ def employer_new(request):
                 
         print("data.name is",data.name)
         return render(request,'register.html',{'data':data})
-
 def jobseeker_new(request):
         data=Data()
         data.name='Job Seeker'       
@@ -174,13 +174,16 @@ def jobseeker_new(request):
                         return render(request,'register.html',{'message':message})
 
         return render(request,'register.html',{'data':data})
-
 def re_login(request):
         data=Data()
         data.name='Job Seeker Login'
         return render(request,"login.html",{'data':data})
 def employer_dashboard(request):
-       
-        return render(request,"employer_dashboard.html")
+        if request.method=="POST":
+                return render(request,'home.html',{})
+        else:     
+                return render(request,"employer_dashboard.html")
 def jobseeker_dashboard(request):
         return render(request,"jobseeker_dashboard.html")
+
+#######################################################################################
