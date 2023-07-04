@@ -7,34 +7,59 @@
     {%include 'base.html'%}
     <form action="" method="POST">
         {% csrf_token %}
-        <div id="login">
-            <h3 class="text-center text-white pt-5">Employeer Login form</h3>
-            <div class="container">
+        <div id="Registation">
+            <h1 class="text-center text-primary pt-2">{{data.name}} Registation Form</h1>
+         
+            <div id="login-row" class="row justify-content-center">
+                <label class="text-primary">{{Passwordmessage}}</label>
+                <label class="text-primary">{{message}}</label>
+            </div>
+              <div class="container">
                 <div id="login-row" class="row justify-content-center align-items-center">
                     <div id="login-column" class="col-md-6">
                         <div id="login-box" class="col-md-12">
-                                <div id="data_js">{{data.name}}</div>
-                                <label for="email">Email</label>
+                               
+                                <label for="Firstname">First name</label>
                                 <div class="form-group">
-                                    <input type="email" class="form-control p-2" id="email" name="email" requires>
+                                    <input type="text" class="form-control p-2" 
+                                    id="Firstname" name="first_name" requires>
                                 </div>
 
-                                <label for="password1">Password</label>
+                                <label for="lastname">Last name</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control p-2" 
+                                    id="lastname" name="last_name" requires>
+                                </div>
+                                
+                                <label for="email">Email</label>
+                                <div class="form-group">
+                                    <input type="email" class="form-control p-2" 
+                                    id="email" name="email" requires>
+                                </div>
+
+                                <label for="password">Password</label>
                                 <div class="form-group">
                                     <input type="password" class="form-control p-2" 
                                     id="password" name="password" requires>
                                 </div>
 
-                                <label for=" password2">Confirm Password</label>
+                                <label for="conformpassword">Conform Password</label>
                                 <div class="form-group">
                                     <input type="password" class="form-control p-2" 
-                                    id="conformPassword" name="conformPassword"
-                                        required>
+                                    id="conformpassword" name="conform_password" requires>
                                 </div>
+                                {% if data.name == 'Employer' %}
+                                    <label for="organization_name">Organization Name</label>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control p-2" 
+                                        id="organizationname" name="organization_name" requires>
+                                    </div>
+                                {% endif %}                       
                                 <br>
-                                <button type="submit" class="btn btn-dark">SignUp</button>
+                                <button type="submit" class="btn btn-dark" 
+                                name="btnRegister" value="{{data.name}}">Register</button>
                                 <br>
-                                Already User? <a href="/re_login" name="relogin">Login</a>
+                                Already User? <a href="/re_login" name="relogin" >Login</a>
                         </div>
                     </div>
                 </div>

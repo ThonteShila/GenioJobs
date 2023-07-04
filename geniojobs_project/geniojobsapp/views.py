@@ -1,15 +1,12 @@
-from django.shortcuts import render,redirect
-from geniojobsapp.models import Data,student,Grade
-from django.http import HttpResponse,HttpResponseRedirect
-from .forms import FeedbackForm
+from django.shortcuts import render
+from django.template import RequestContext
+from geniojobsapp.models import Data,student,Grade,GenioUsers
+from django.http import HttpResponse
 from django.contrib.auth.models import User  
 # Create your views here.
-def home(request):
-        return render(request,'home.html',{})
+
 def grade_function(request):
-        print("grade")
         grade=Grade.objects.all()
-        print(grade)
         context={
                "grade":grade
                }
@@ -35,7 +32,6 @@ def add_stud(request):
                              stud_grade=grade,iscurrent=False)
                 
                 stud.save()                
-                print("Student added successfully.")    
                 message="Student added successfully."
                 grade=Grade.objects.all()       
                 context={
@@ -44,61 +40,147 @@ def add_stud(request):
                 }
                 return render(request, 'add_stud.html',context)      
         elif request.method == 'GET':
-                print("grade")
                 grade=Grade.objects.all()
-                for g in grade:
-                        print(g.gradename)
-                print("grade")
-
                 context={
                 "grade":grade
                 }
                 return render(request, 'add_stud.html',context)
         else:
                 return HttpResponse("Else and handled, studnot Added.")
-def employeer_login_page(request):
-        data=Data()
-        data.name='Employeer Login'
-        if request.method=="POST":
-                login_email=request.POST.get('emailLogin')
-                login_password=request.POST.get('passwordLogin')
-                print(login_email,login_password)
-                print("if")
-        return render(request,"login.html",{'data':data})
+        
 
-def jobseeker_login_page(request):
+def home(request):
+        return render(request,'home.html',{})
+
+def employer_login(request):
+        data=Data()
+        data.name='Employer Login'
+        global login_success
+        login_success=False
+
+        if request.method=="POST":                
+                emailLogin=request.POST.get('emailLogin')
+                passwordLogin=request.POST.get('passwordLogin')
+                geniousers = GenioUsers.objects.filter(is_employer=True
+                                                       ,email=emailLogin
+                                                       ,password=passwordLogin)
+                print("geniousers count:",geniousers.count())
+                message="Record for this email and password is not present"
+                for geniouser in geniousers:
+                        if geniousers.count()==1:
+                                message="Successfully login" 
+                                print("message:",message)
+                                login_success=True
+                                break    
+                        else :
+                                message="Email or Password do not match" 
+                                print("message:",message)                              
+                                login_success=False
+                                break
+                if login_success==True:
+                        return render(request,"employer_dashboard.html",{'message':message})      
+                else:
+                        return render(request,"login.html",{'message':message})                              
+        
+        elif request.method=="GET":
+                print("message:","GET")
+                return render(request,"login.html",{'data':data})
+ 
+        print("message:","out")
+        return render(request,"login.html",{'data':data})                  
+
+def jobseeker_login(request):
         data=Data()
         data.name='Job Seeker Login'
-        return render(request,"login.html",{'data':data})
+        global login_success
+        login_success=False
 
-def employeer_new(request):
-        data=Data()
-        data.name='Employeer Registation Form'
-        if request.method=="POST":
-                email=request.POST.get('email')
-                password=request.POST.get('password')
-                conformpassword=request.POST.get('conformPassword')
-                data.is_employeer=True
-                print(email,password,conformpassword)
-                if password!=conformpassword:
-                        return HttpResponse("Password and conform password not matching")
+        if request.method=="POST":                
+                emailLogin=request.POST.get('emailLogin')
+                passwordLogin=request.POST.get('passwordLogin')
+                geniousers = GenioUsers.objects.filter(is_employer=False
+                                                       ,email=emailLogin
+                                                       ,password=passwordLogin)
+                print("geniousers count:",geniousers.count())
+                message="Record for this email and password is not present"
+                for geniouser in geniousers:
+                        if geniousers.count()==1:
+                                message="Successfully login" 
+                                print("message:",message)
+                                login_success=True
+                                break    
+                        else :
+                                message="Email or Password do not match" 
+                                print("message:",message)                              
+                                login_success=False
+                                break
+                if login_success==True:
+                        return render(request,"jobseeker_dashboard.html",{'message':message})      
                 else:
+                        return render(request,"login.html",{'message':message})                              
+        
+        elif request.method=="GET":
+                print("message:","GET")
+                return render(request,"login.html",{'data':data})
+ 
+        print("message:","out")
+        return render(request,"login.html",{'data':data})                  
 
-                        userobj=User.objects.create_user(email,password,conformpassword)
-                        userobj.save()
-                        return redirect('login')
+
+def employer_new(request):
+        data=Data()
+        data.name='Employer'
+        print("Method is",request.method)
+        if request.method=="POST":
+                firstname=request.POST.get('first_name')
+                lastname=request.POST.get('last_name')
+                employee_email=request.POST.get('email')
+                employee_password=request.POST.get('password')
+                conformpassword=request.POST.get('conform_password')
+                organizationname=request.POST.get('organization_name')
+                if employee_password!=conformpassword:
+                        Passwordmessage="Password and Conform password not matching"
+                        return render(request,'register.html',{'Passwordmessage':Passwordmessage})
+                else:
+                        geniousersobj=GenioUsers(first_name=firstname,last_name=lastname,email=employee_email,
+                                                                is_employer=True,password=employee_password,
+                                                                organization_name=organizationname)
+                        geniousersobj.save()
+                        message="Employer added successfully."
+                        return render(request,'register.html',{'message':message})
+                
+        print("data.name is",data.name)
         return render(request,'register.html',{'data':data})
 
-def jobseeker_new_page(request):
+def jobseeker_new(request):
         data=Data()
-        data.name='Job Seeker Registration Form'
+        data.name='Job Seeker'       
+        print("Method is",request.method) 
+        print("data.name is:",data.name)
+        if request.method=="POST":
+                firstname=request.POST.get('first_name')
+                lastname=request.POST.get('last_name')
+                employee_email=request.POST.get('email')
+                employee_password=request.POST.get('password')
+                conformpassword=request.POST.get('conform_password')
+                if employee_password!=conformpassword:
+                        Passwordmessage="Password and Conform password not matching"
+                        return render(request,'register.html',{'Passwordmessage':Passwordmessage})
+                else:
+                        geniousersobj=GenioUsers(first_name=firstname,last_name=lastname,email=employee_email,
+                                                        is_employer=False,password=employee_password)
+                        geniousersobj.save()
+                        message="Job Seeker added successfully."
+                        return render(request,'register.html',{'message':message})
+
         return render(request,'register.html',{'data':data})
 
 def re_login(request):
         data=Data()
         data.name='Job Seeker Login'
         return render(request,"login.html",{'data':data})
-def employeer_dashboard(request):
-        return render(request,"employeer_dashboard.html")
+def employer_dashboard(request):
+       
+        return render(request,"employer_dashboard.html")
 def jobseeker_dashboard(request):
         return render(request,"jobseeker_dashboard.html")

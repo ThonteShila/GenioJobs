@@ -18,3 +18,15 @@ class student(models.Model):
     stud_age=models.IntegerField()
     iscurrent=models.BooleanField(default=True)
     stud_grade=models.ForeignKey(Grade, on_delete=models.CASCADE)
+
+class GenioUsers(models.Model):
+    first_name=models.CharField(max_length=100)
+    last_name=models.CharField(max_length=100)
+    email=models.EmailField(max_length=100)
+    is_employer=models.BooleanField(default=False)
+    password=models.CharField(max_length=50)
+    is_active=models.BooleanField(default=True)
+    organization_name=models.CharField(max_length=100,default="")
+    last_update_date=models.DateTimeField(auto_now_add=True)
+
+

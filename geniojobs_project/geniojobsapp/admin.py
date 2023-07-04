@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import student,Grade
+from .models import student,Grade,GenioUsers
 
 
 # Register your models here.
@@ -8,3 +8,4 @@ from .models import student,Grade
 
 admin.site.register(student)
 admin.site.register(Grade)
+admin.site.register(GenioUsers)
