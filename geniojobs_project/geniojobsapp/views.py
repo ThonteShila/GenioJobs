@@ -180,10 +180,15 @@ def re_login(request):
         return render(request,"login.html",{'data':data})
 def employer_dashboard(request):
         if request.method=="POST":
-                return render(request,'home.html',{})
+                if request.POST.get('addlisting'):              
+                         return redirect("add_listing")
+
         else:     
-                return render(request,"employer_dashboard.html")
+                return render(request,"employer_dashboard.html",{})
 def jobseeker_dashboard(request):
         return render(request,"jobseeker_dashboard.html")
 
 #######################################################################################
+def add_listing(request):
+        
+        return render(request,"add_listing.html",{})

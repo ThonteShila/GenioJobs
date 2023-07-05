@@ -29,4 +29,10 @@ class GenioUsers(models.Model):
     organization_name=models.CharField(max_length=100,default="")
     last_update_date=models.DateTimeField(auto_now_add=True)
 
-
+class Job_Listing(models.Model):
+    job_title=models.CharField(max_length=100)
+    skills=models.CharField(max_length=200)
+    experience=models.IntegerField(default=0)
+    no_of_vacancies=models.IntegerField(default=1)
+    expiration_date=models.DateTimeField()
+    
