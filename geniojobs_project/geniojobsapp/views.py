@@ -1,9 +1,15 @@
 from django.shortcuts import redirect, render
 from django.template import RequestContext
-from geniojobsapp.models import Data,student,Grade,GenioUsers
+from geniojobsapp.models import Data,student,Grade,GenioUsers,Job_Listing
 from django.http import HttpResponse
 from django.contrib.auth.models import User  
+from rest_framework import viewsets
+from geniojobsapp.serializers import Job_ListingSerializer
 
+
+class Job_ListingViewSet(viewsets.ModelViewSet):
+    queryset=Job_Listing.objects.all()
+    serializer_class=Job_ListingSerializer
 # Create your views here.
 
 def grade_function(request):
@@ -61,7 +67,8 @@ def employer_login(request):
         data.name='Employer Login'
         global login_success
         login_success=False
-
+        global login_user_name
+        
         if request.method=="POST":                
                 emailLogin=request.POST.get('emailLogin')
                 passwordLogin=request.POST.get('passwordLogin')
@@ -75,6 +82,7 @@ def employer_login(request):
                                 message="Successfully login" 
                                 print("message:",message)
                                 login_success=True
+                                login_user_name=geniouser.first_name + ' ' + geniouser.last_name
                                 break    
                         else :
                                 message="Email or Password do not match" 
@@ -82,7 +90,17 @@ def employer_login(request):
                                 login_success=False
                                 break
                 if login_success==True:
-                        return redirect('../employer_dashboard', {'message':message})
+                        myid=geniouser.pk
+                        print ("id",myid)
+                        context={
+                                'message':message,
+                                'login_user_name':login_user_name,
+                                 'myid':myid
+                        }
+                        print("login_user_name",context)
+                        return redirect('../employer_dashboard',context)
+                
+
                 else:
                         return render(request,"login.html",{'message':message})                              
         
@@ -179,16 +197,25 @@ def re_login(request):
         data.name='Job Seeker Login'
         return render(request,"login.html",{'data':data})
 def employer_dashboard(request):
+        current_user=request.user
+        print(current_user.id)
+        print(login_success)
+        print(login_user_name)
         if request.method=="POST":
                 if request.POST.get('addlisting'):              
                          return redirect("add_listing")
 
-        else:     
-                return render(request,"employer_dashboard.html",{})
+        else:   
+                
+              
+                #print("geniousers count:",login_user_name)
+             
+                message=login_user_name
+                return render(request,"employer_dashboard.html",{'message':message})
 def jobseeker_dashboard(request):
         return render(request,"jobseeker_dashboard.html")
 
 #######################################################################################
 def add_listing(request):
         
-        return render(request,"add_listing.html",{})
+        return redirect("geniojobsapp/v1")
