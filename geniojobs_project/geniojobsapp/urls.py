@@ -1,13 +1,8 @@
 from django.contrib import admin
 from django.urls import path,include
-from geniojobsapp.views import Job_ListingViewSet
-from rest_framework import routers
-router=routers.DefaultRouter()
-router.register(r'employer_Create_list',Job_ListingViewSet)
 from . import views
 urlpatterns = [
-     path('',include(router.urls)),
-     path('home/', views.home, name='home'),
+     path('', views.home, name='home'),
      path('grade_function/', views.grade_function, name='grade_function'),
      path('add_listing/', views.add_listing, name='add_listing'),
      path('display_stud/', views.display_stud, name='display_stud'),

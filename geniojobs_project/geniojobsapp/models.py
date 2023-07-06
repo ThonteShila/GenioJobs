@@ -35,4 +35,5 @@ class Job_Listing(models.Model):
     experience=models.IntegerField(default=0)
     no_of_vacancies=models.IntegerField(default=1)
     expiration_date=models.DateTimeField()
+    genio_user_id=models.ForeignKey(GenioUsers,on_delete=models.CASCADE,default=0)
     

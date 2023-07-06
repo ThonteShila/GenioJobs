@@ -19,6 +19,5 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('add_listing/geniojobsapp/v1/', include('geniojobsapp.urls')),
-    path('', include('geniojobsapp.urls'),)
+    path('',include('geniojobsapp.urls'))
 ]
