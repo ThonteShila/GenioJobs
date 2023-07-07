@@ -63,8 +63,30 @@
                         <input type="submit" name="addlisting" href="/add_listing" value="Add Listing"
                             class="btn btn-outline-primary float-right">
                     </div>
-
                 </div>
+                <table class="table table-primary table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Listings</th>
+                            <th scope="col">Skills</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    {% for jobs in job_listing %}
+                    <tbody>
+                        <tr>
+                            <td>{{jobs.job_title}}</td>
+                            <td>{{jobs.skills}}</td>
+                            <td><button type="submit" class="btn btn-success" 
+                                name="btn_edit">Edit</button></td>
+                            <td><button type="submit" class="btn btn-danger" 
+                                name="btn_delete">Delete</button></td>
+                    </tbody>
+                    {% endfor %}
+        
+                </table>
+
             </div>
         </div>
     </form>

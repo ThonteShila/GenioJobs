@@ -192,8 +192,15 @@ def employer_dashboard(request):
         if request.method=="POST":
                 return redirect("../add_listing")
         else:   
+                job_listing=Job_Listing.objects.all()
+                context={
+                        'job_listing':job_listing,
+                        'login_user_name':login_user_name
+                }
+     
                 print(login_user_name)
-                return render(request,"employer_dashboard.html",{'login_user_name':login_user_name})
+                #if 'btn_create_list' in request.POST:
+                return render(request,"employer_dashboard.html",context)
 def jobseeker_dashboard(request):
         return render(request,"jobseeker_dashboard.html")
 
