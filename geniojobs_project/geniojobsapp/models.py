@@ -28,7 +28,7 @@ class GenioUsers(models.Model):
     is_active=models.BooleanField(default=True)
     organization_name=models.CharField(max_length=100,default="")
     last_update_date=models.DateTimeField(auto_now_add=True)
-
+    
 class Job_Listing(models.Model):
     job_title=models.CharField(max_length=100)
     skills=models.CharField(max_length=200)

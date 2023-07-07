@@ -1,5 +1,5 @@
   {%include 'base.html'%}
-  
+ 
   <form action="" method="POST">
       {% csrf_token %}
       <div id="create_listing">
@@ -26,7 +26,7 @@
                               
                               <label for="experience">Experience</label>
                               <div>
-                                <select name="select1" onmousedown="if(this.options.length>3){this.size=3;}" onchange='this.size=0;' onblur="this.size=0;">
+                                <select name="experience" onmousedown="if(this.options.length>3){this.size=3;}" onchange='this.size=0;' onblur="this.size=0;">
                                   <option value="1">1 year</option>
                                   <option value="2">2 years</option>
                                   <option value="3">3 years</option>
@@ -75,9 +75,7 @@
                               <br>
                               <button type="submit" class="btn btn-dark" 
                               name="btn_create_list">Create List</button>
-                              <br>
-
-                              <br>
+                              &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                               <button type="submit" class="btn btn-dark" 
                               name="btn_cancle">Cancle</button>
                               <br>

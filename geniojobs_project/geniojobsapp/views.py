@@ -59,7 +59,7 @@ def employer_login(request):
         global login_success
         login_success=False
         global login_user_name
-        
+        global geniousers_id
         if request.method=="POST":                
                 emailLogin=request.POST.get('emailLogin')
                 passwordLogin=request.POST.get('passwordLogin')
@@ -81,12 +81,12 @@ def employer_login(request):
                                 login_success=False
                                 break
                 if login_success==True:
-                        myid=geniouser.pk
-                        print ("id",myid)
+                        geniousers_id=geniouser.pk
+                        print ("id",geniousers_id)
                         context={
                                 'message':message,
                                 'login_user_name':login_user_name,
-                                 'myid':myid
+                                 'geniousers_id':geniousers_id
                         }
                         print("login_user_name",context)
                         return redirect('../employer_dashboard',context)
@@ -199,7 +199,25 @@ def jobseeker_dashboard(request):
 
 #######################################################################################
 def add_listing(request):
-        return render(request,"add_listing.html")
-   
+        print(geniousers_id)
+        if request.method=="POST":
+                btn_create_list=request.POST.get('btn_create_list')
+                jobtitle=request.POST.get('job_title')
+                skill=request.POST.get('skills')
+                experience=request.POST.get('experience')
+                no_of_vacancies=request.POST.get('no_of_vacancies')
+                expiration_date=request.POST.get('expiration_date')
+                
+                geniousers=GenioUsers()
+                geniousers.id=geniousers_id
+                job_listing_obj=Job_Listing(job_title=jobtitle,skills=skill,experience=experience,
+                                            no_of_vacancies=no_of_vacancies,
+                                            expiration_date=expiration_date,genio_user_id=geniousers)
+                job_listing_obj.save()
+                message="Student added successfully."
+                return render(request,"add_listing.html",{'message':message})
+        else:
+                return render(request,"add_listing.html")
+  
                 
 
