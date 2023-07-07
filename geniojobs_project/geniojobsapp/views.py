@@ -201,21 +201,27 @@ def jobseeker_dashboard(request):
 def add_listing(request):
         print(geniousers_id)
         if request.method=="POST":
-                btn_create_list=request.POST.get('btn_create_list')
-                jobtitle=request.POST.get('job_title')
-                skill=request.POST.get('skills')
-                experience=request.POST.get('experience')
-                no_of_vacancies=request.POST.get('no_of_vacancies')
-                expiration_date=request.POST.get('expiration_date')
-                
-                geniousers=GenioUsers()
-                geniousers.id=geniousers_id
-                job_listing_obj=Job_Listing(job_title=jobtitle,skills=skill,experience=experience,
-                                            no_of_vacancies=no_of_vacancies,
-                                            expiration_date=expiration_date,genio_user_id=geniousers)
-                job_listing_obj.save()
-                message="Student added successfully."
-                return render(request,"add_listing.html",{'message':message})
+                        request.POST.get('btn_create_list')
+                        cancle=request.POST.get('btn_cancle')
+                        jobtitle=request.POST.get('job_title')
+                        skill=request.POST.get('skills')
+                        experience=request.POST.get('experience')
+                        no_of_vacancies=request.POST.get('no_of_vacancies')
+                        expiration_date=request.POST.get('expiration_date')
+                        if 'btn_create_list' in request.POST:
+                                geniousers=GenioUsers()
+                                geniousers.id=geniousers_id
+                                job_listing_obj=Job_Listing(job_title=jobtitle,skills=skill,experience=experience,
+                                                        no_of_vacancies=no_of_vacancies,
+                                                        expiration_date=expiration_date,genio_user_id=geniousers)
+                                
+                                job_listing_obj.save()
+                                message="Job added successfully."
+                                return render(request,"add_listing.html",{'message':message})
+                        if 'btn_cancle' in request.POST:
+                                message="Job Not added."
+                                return render(request,"employer_dashboard.html",{'message':message})        
+                        
         else:
                 return render(request,"add_listing.html")
   
