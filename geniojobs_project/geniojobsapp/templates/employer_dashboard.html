@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <form action="" method="POST">
+    <form>
         {%csrf_token%}
         <nav class="navbar navbar-expand-lg navbar-light bg-primary">
             <a class="navbar-brand text-warning" href="#">GenioJobs</a>
@@ -45,9 +45,8 @@
                 </div>
             </div>
         </nav>
-        </form>
-        <form action="" method="POST">
-            {%csrf_token%}
+    </form>
+    <form >
         <div class="div id=dashboard-row" class="row justify-content-center align-items-center">
             <div id="dashboard-box" class="col-md-6">
                 <h2>Employer Dashboard</h2>
@@ -60,34 +59,35 @@
                         <h3>My Listing</h3>
                     </div>
                     <div class="col-sm-6">
-                        <input type="submit" name="addlisting" href="/add_listing" value="Add Listing"
-                            class="btn btn-outline-primary float-right">
+                        <a type="submit" name="addlisting" href="/add_listing" value="Create Listing"
+                            class="btn btn-outline-primary float-right">Create Listing</a>
                     </div>
                 </div>
-                <table class="table table-primary table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Listings</th>
-                            <th scope="col">Skills</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    {% for jobs in job_listing %}
-                    <tbody>
-                        <tr>
-                            <td>{{jobs.job_title}}</td>
-                            <td>{{jobs.skills}}</td>
-                            <td><button type="submit" class="btn btn-success" 
-                                name="btn_edit">Edit</button></td>
-                            <td><button type="submit" class="btn btn-danger" 
-                                name="btn_delete">Delete</button></td>
-                    </tbody>
-                    {% endfor %}
-        
-                </table>
-
             </div>
+            <table class="table table-primary table-striped">
+                <thead>
+                    <tr>
+
+                        <th scope="col">Listings</th>
+                        <th scope="col">Skills</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in job_listing %}
+                    <tr>
+                        <td>{{job.job_title}}</td>
+                        <td>{{job.skills}}</td>
+                        <td><button type="submit" class="btn btn-success" name="btn_edit">Edit</button></td>
+                        <td><a class="btn btn-danger" href="/delete/{{job.id}}" name="btn_delete">
+                                Delete</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
         </div>
     </form>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

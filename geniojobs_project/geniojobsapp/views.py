@@ -1,8 +1,11 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render,get_object_or_404
 from django.template import RequestContext
 from geniojobsapp.models import Data,student,Grade,GenioUsers,Job_Listing
-from django.http import HttpResponse
-from django.contrib.auth.models import User  
+from django.http import HttpResponse,HttpResponseRedirect
+from django.contrib.auth.models import User
+
+login_user_name = "user here"
+geniousers_id=0
 def grade_function(request):
         grade=Grade.objects.all()
         context={
@@ -46,19 +49,26 @@ def add_stud(request):
         else:
                 return HttpResponse("Else and handled, studnot Added.")
 
-def get_resource(self):    
-        print("inside home")
-        return "my resource"
-
+def stud_detail(request,first_name):    
+        print(first_name)
+        stud=None
+        stud_list=student.objects.filter(first_name=str(first_name))
+        if len(stud_list)>0:
+                stud=stud_list[0]
+        else:
+                stud=None
+        return render(request,'stud_deatil.html',
+                  {'stud': stud})
 def home(request):
         print("inside home")
         return render(request,'home.html',{})
-def employer_login(request):
+def employer_login(request): 
+        global login_user_name       
+        print("inside employer_login")
         data=Data()
         data.name='Employer Login'
         global login_success
         login_success=False
-        global login_user_name
         global geniousers_id
         if request.method=="POST":                
                 emailLogin=request.POST.get('emailLogin')
@@ -188,24 +198,26 @@ def re_login(request):
         data.name='Job Seeker Login'
         return render(request,"login.html",{'data':data})
 def employer_dashboard(request):
-       # print(login_user_name)
-        if request.method=="POST":
-                return redirect("../add_listing")
+        print("login_user_name",login_user_name)
+        if request.method=="POST":                
+                if 'addlisting' in request.POST:
+                        return redirect("../add_listing")                
+                return render(request,"employer_dashboard.html")
         else:   
                 job_listing=Job_Listing.objects.all()
                 context={
                         'job_listing':job_listing,
                         'login_user_name':login_user_name
                 }
-     
-                print(login_user_name)
-                #if 'btn_create_list' in request.POST:
                 return render(request,"employer_dashboard.html",context)
+                        
 def jobseeker_dashboard(request):
         return render(request,"jobseeker_dashboard.html")
 
+
 #######################################################################################
 def add_listing(request):
+        global job_id
         print(geniousers_id)
         if request.method=="POST":
                         request.POST.get('btn_create_list')
@@ -221,16 +233,29 @@ def add_listing(request):
                                 job_listing_obj=Job_Listing(job_title=jobtitle,skills=skill,experience=experience,
                                                         no_of_vacancies=no_of_vacancies,
                                                         expiration_date=expiration_date,genio_user_id=geniousers)
-                                
+                                job_id=job_listing_obj.id
                                 job_listing_obj.save()
                                 message="Job added successfully."
                                 return render(request,"add_listing.html",{'message':message})
                         if 'btn_cancle' in request.POST:
                                 message="Job Not added."
                                 return render(request,"employer_dashboard.html",{'message':message})        
-                        
-        else:
+                                #return render(request, 'employer_dashboard.html', context)
+        else:        
                 return render(request,"add_listing.html")
-  
-                
-
+        
+def delete(request,id):
+        #job=Job_Listing.objects.filter(id=request.session['jobs.id']).delete()
+        print("in delete:", id)
+        print("login_user_name",login_user_name)
+        print("in request.method:", request.method)
+        global message
+        message = "some msg"
+        if request.method=="GET":
+                job=Job_Listing.objects.get(pk=id).delete()              
+                print("in Get:", id)
+                message="One Record Removed"
+                print("in message:", message)
+                return redirect("../employer_dashboard")
+        return render(request,"employer_dashboard.html",{'message':message})
+        
