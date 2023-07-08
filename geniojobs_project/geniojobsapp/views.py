@@ -221,7 +221,7 @@ def add_listing(request):
         print(geniousers_id)
         if request.method=="POST":
                         request.POST.get('btn_create_list')
-                        cancle=request.POST.get('btn_cancle')
+                        cancel=request.POST.get('btn_cancel')
                         jobtitle=request.POST.get('job_title')
                         skill=request.POST.get('skills')
                         experience=request.POST.get('experience')
@@ -237,9 +237,9 @@ def add_listing(request):
                                 job_listing_obj.save()
                                 message="Job added successfully."
                                 return render(request,"add_listing.html",{'message':message})
-                        if 'btn_cancle' in request.POST:
+                        if 'btn_cancel' in request.POST:
                                 message="Job Not added."
-                                return render(request,"employer_dashboard.html",{'message':message})        
+                                return redirect("../employer_dashboard")        
                                 #return render(request, 'employer_dashboard.html', context)
         else:        
                 return render(request,"add_listing.html")

@@ -1,89 +1,86 @@
-  {%include 'base.html'%}
- 
-  <form action="" method="POST">
-      {% csrf_token %}
-      <div id="create_listing">
-          <h1 class="text-center text-primary pt-2">Create New Listing</h1>
-          <div id="create_listing-row" class="row justify-content-center">
-              <label class="text-primary">{{message}}</label>
-          </div>
-            <div class="container">
-              <div id="create_listing-row" class="row justify-content-center align-items-center">
-                  <div id="create_listing-column" class="col-md-6">
-                      <div id="create_listing-box" class="col-md-12">
-                             
-                              <label for="job_title">Job Title</label>
-                              <div class="form-group">
-                                  <input type="text" class="form-control p-2" 
-                                  id="job_title" name="job_title" requires>
-                              </div>
+{%include 'base.html'%}
 
-                              <label for="skills">Required Skills</label>
-                              <div class="form-group">
-                                  <input type="text" class="form-control p-2" 
-                                  id="skills" name="skills" requires>
-                              </div>
-                              
-                              <label for="experience">Experience</label>
-                              <div>
-                                <select name="experience" onmousedown="if(this.options.length>3){this.size=3;}" onchange='this.size=0;' onblur="this.size=0;">
-                                  <option value="1">1 year</option>
-                                  <option value="2">2 years</option>
-                                  <option value="3">3 years</option>
-                                  <option value="4">4 years</option>
-                                  <option value="5">5 years</option>
-                                  <option value="6">6 years</option>
-                                  <option value="7">7years</option>
-                                  <option value="8">8 years</option>
-                                  <option value="9">9 year</option>
-                                  <option value="10">10 years</option>
-                                  <option value="11">11 years</option>
-                                  <option value="12">12 years</option>
-                                  <option value="13">13 years</option>
-                                  <option value="14">14 years</option>
-                                  <option value="15">15 years</option>
-                                  <option value="16">16 years</option>                                <option value="2">2 years</option>
-                                  <option value="17">17 years</option>
-                                  <option value="18">18 years</option>
-                                  <option value="19">19 years</option>
-                                  <option value="20">20 years</option>
-                                  <option value="21">21 years</option>
-                                  <option value="22">22 years</option>                            <option value="2">2 years</option>
-                                  <option value="23">23 years</option>
-                                  <option value="24">24 years</option>
-                                  <option value="25">25 years</option>
-                                  <option value="26">26 years</option>
-                                  <option value="27">27years</option>
-                                  <option value="28">28 years</option>                                <option value="2">2 years</option>
-                                  <option value="29">29 years</option>
-                                  <option value="30">30 years</option>
-                                </select>
-                              </div>
-                              <br>
-                              <label for="no_of_vacancies">No_Of_Vacancies</label>
-                              <div class="form-group">
-                                  <input type="no_of_vacancies" class="form-control p-2" 
-                                  id="no_of_vacancies" name="no_of_vacancies" requires>
-                              </div>
+<form action="" method="POST">
+    {% csrf_token %}
+    <div id="create_listing">
+        <h1 class="text-center text-primary pt-2">Create New Listing</h1>
+        <div id="create_listing-row" class="row justify-content-center">
+            <label class="text-primary">{{message}}</label>
+        </div>
+        <div class="container">
+            <div id="create_listing-row" class="row justify-content-center align-items-center">
+                <div id="create_listing-column" class="col-md-6">
+                    <div id="create_listing-box" class="col-md-12">
 
-                              <label for="expiration_date">Expiration_date</label>
-                              <div class="form-group">
-                                  <input type="date" class="form-control p-2" 
-                                  id="expiration_date" name="expiration_date" requires>
-                              </div>
-                                                
-                              <br>
-                              <button type="submit" class="btn btn-dark" 
-                              name="btn_create_list">Create List</button>
-                              &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                              <button type="submit" class="btn btn-dark" 
-                              name="btn_cancle">Cancle</button>
-                              <br>
-                        
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </form>
+                        <label for="job_title">Job Title</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control p-2" id="job_title" name="job_title" requires>
+                        </div>
+
+                        <label for="skills">Required Skills</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control p-2" id="skills" name="skills" requires>
+                        </div>
+
+                        <label for="experience">Experience</label>
+                        <div>
+                            <select name="experience" onmousedown="if(this.options.length>3){this.size=3;}"
+                                onchange='this.size=0;' onblur="this.size=0;">
+                                <option value="0">0</option>
+                                <option value="1">1 year</option>
+                                <option value="2">2 years</option>
+                                <option value="3">3 years</option>
+                                <option value="4">4 years</option>
+                                <option value="5">5 years</option>
+                                <option value="6">6 years</option>
+                                <option value="7">7years</option>
+                                <option value="8">8 years</option>
+                                <option value="9">9 year</option>
+                                <option value="10">10 years</option>
+                                <option value="11">11 years</option>
+                                <option value="12">12 years</option>
+                                <option value="13">13 years</option>
+                                <option value="14">14 years</option>
+                                <option value="15">15 years</option>
+                                <option value="16">16 years</option>
+                                <option value="17">17 years</option>
+                                <option value="18">18 years</option>
+                                <option value="19">19 years</option>
+                                <option value="20">20 years</option>
+                                <option value="21">21 years</option>
+                                <option value="22">22 years</option>
+                                <option value="23">23 years</option>
+                                <option value="24">24 years</option>
+                                <option value="25">25 years</option>
+                                <option value="26">26 years</option>
+                                <option value="27">27years</option>
+                                <option value="28">28 years</option>
+                                <option value="30">30 years</option>
+                            </select>
+                        </div>
+                        <br>
+                        <label for="no_of_vacancies">No Of Vacancies</label>
+                        <div class="form-group">
+                            <input type="no_of_vacancies" class="form-control p-2" id="no_of_vacancies"
+                                name="no_of_vacancies" requires>
+                        </div>
+
+                        <label for="expiration_date">Expiration date</label>
+                        <div class="form-group">
+                            <input type="date" class="form-control p-2" id="expiration_date" name="expiration_date"
+                                requires>
+                        </div>
+
+                        <br>
+                        <button type="submit" class="btn btn-dark" name="btn_create_list">Create</button>
+                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                        <button type="submit" class="btn btn-dark" name="btn_cancel">Cancel</button>
+                        <br>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 </body>
