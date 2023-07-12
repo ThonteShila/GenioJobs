@@ -10,9 +10,6 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from django.utils.timezone import make_aware
 from time import strptime
-login_user_name = "user here"
-geniousers_id=0
-
 def grade_function(request):
         grade=Grade.objects.all()
         context={
@@ -69,14 +66,12 @@ def stud_detail(request,first_name):
 def home(request):
         print("inside home")
         return render(request,'home.html',{})
-def employer_login(request): 
-        global login_user_name       
+def employer_login(request):        
         print("inside employer_login")
         data=Data()
         data.name='Employer Login'
         global login_success
         login_success=False
-        global geniousers_id
         if request.method=="POST":                
                 emailLogin=request.POST.get('emailLogin')
                 passwordLogin=request.POST.get('passwordLogin')
@@ -84,13 +79,13 @@ def employer_login(request):
                                                        ,email=emailLogin
                                                        ,password=passwordLogin)
                 print("geniousers count:",geniousers.count())
-                message="Record for this email and password is not present"
+                message="Login again,record not found" 
                 for geniouser in geniousers:
                         if geniousers.count()==1:
                                 message="Successfully login" 
                                 print("message:",message)
                                 login_success=True
-                                login_user_name=geniouser.first_name + ' ' + geniouser.last_name
+                                request.session['login_user_name']=geniouser.first_name + ' ' + geniouser.last_name
                                 break    
                         else :
                                 message="Email or Password do not match" 
@@ -98,13 +93,12 @@ def employer_login(request):
                                 login_success=False
                                 break
                 if login_success==True:
-                        geniousers_id=geniouser.pk
+                        request.session['login_success']=True
+                        request.session['geniousers_id']=geniouser.pk                         
                         context={
                                 'message':message,
-                                'login_user_name':login_user_name
+                                'login_user_name':request.session['login_user_name']
                         }
-                        print("login_user_name",context)
-
                         return redirect('../employer_dashboard',context)
                 else:
                         return render(request,"login.html",{'message':message})                              
@@ -202,7 +196,7 @@ def re_login(request):
         data.name='Job Seeker Login'
         return render(request,"login.html",{'data':data})
 def employer_dashboard(request):
-        print("login_user_name",login_user_name)
+        print("login_user_name",request.session['login_user_name'])
         if request.method=="POST":                
                 if 'addlisting' in request.POST:
                         return redirect("../add_listing")                
@@ -211,7 +205,7 @@ def employer_dashboard(request):
                 job_listing=Job_Listing.objects.all()
                 context={
                         'job_listing':job_listing,
-                        'login_user_name':login_user_name
+                        'login_user_name':request.session['login_user_name']
                 }
                 return render(request,"employer_dashboard.html",context)
                         
@@ -229,7 +223,6 @@ def get_mytimezone_date(original_datetime):
 
 def add_listing(request, job_id):
         global message
-        print("add_listing geniousers_id",geniousers_id)
         print("request.method:add_listing method:",request.method)
         if request.method=="POST":
                 if 'btn_create_list' in request.POST:
@@ -242,17 +235,19 @@ def add_listing(request, job_id):
                         print("HIIIIIIIIII",new_date)
 
                         geniousers=GenioUsers()
-                        geniousers.id=geniousers_id
+                        geniousers.id=request.session['geniousers_id']
                         job_listing_obj=Job_Listing(job_title=jobtitle,skills=skill,experience=experience,
                                                 no_of_vacancies=no_of_vacancies,
                                                 expiration_date=new_date,genio_user_id=geniousers)
                         job_listing_obj.save()
                         message="Job added successfully."
-                        context={                       
+                        
+                        context={         
+                        'login_user_name':request.session['login_user_name'],              
                         'functionality_name':"Create New",
                         'message':message,
                         'job':job_listing_obj,
-                        'experience_years':range(0, 41),
+                        'experience_years':range(0, 41)
                         }    
                         return render(request,"add_listing.html",context)
         elif request.method=="GET":
@@ -267,6 +262,7 @@ def add_listing(request, job_id):
 
                 message=""
                 context={
+                        'login_user_name':request.session['login_user_name'],              
                         'functionality_name':func_name,
                         'message':message,
                         'job':job,
@@ -279,6 +275,7 @@ def add_listing(request, job_id):
                 print("add_listing outer else ")
                 message=""
                 context={
+                        'login_user_name':request.session['login_user_name'],              
                         'functionality_name':"Create New",
                         'message':message,
                         'experience_years':range(0, 41)
@@ -289,7 +286,7 @@ def add_listing(request, job_id):
 def delete_job(request,id):
         #job=Job_Listing.objects.filter(id=request.session['jobs.id']).delete()
         print("in delete:", id)
-        print("login_user_name",login_user_name)
+        print("login_user_name",request.session['login_user_name'])
         print("in request.method:", request.method)
         global message
         message = "some msg"
@@ -301,4 +298,5 @@ def delete_job(request,id):
                 return redirect("../employer_dashboard")
         return render(request,"employer_dashboard.html",{'message':message})
 def employer_logout(request):
+        #del request.session['employer_login']
         return render(request,"login.html",{'message':"Loggedout Here"})
