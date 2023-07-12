@@ -1,11 +1,18 @@
+from django.conf import settings
+from django.forms import DateField, DateInput
 from django.shortcuts import redirect, render,get_object_or_404
 from django.template import RequestContext
+import pytz
 from geniojobsapp.models import Data,student,Grade,GenioUsers,Job_Listing
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.models import User
-
+from datetime import datetime, timedelta
+from django.utils import timezone
+from django.utils.timezone import make_aware
+from time import strptime
 login_user_name = "user here"
 geniousers_id=0
+
 def grade_function(request):
         grade=Grade.objects.all()
         context={
@@ -92,16 +99,13 @@ def employer_login(request):
                                 break
                 if login_success==True:
                         geniousers_id=geniouser.pk
-                        print ("id",geniousers_id)
                         context={
                                 'message':message,
-                                'login_user_name':login_user_name,
-                                 'geniousers_id':geniousers_id
+                                'login_user_name':login_user_name
                         }
                         print("login_user_name",context)
-                        return redirect('../employer_dashboard',context)
-                
 
+                        return redirect('../employer_dashboard',context)
                 else:
                         return render(request,"login.html",{'message':message})                              
         
@@ -216,35 +220,73 @@ def jobseeker_dashboard(request):
 
 
 #######################################################################################
-def add_listing(request):
-        global job_id
-        print(geniousers_id)
+
+def get_mytimezone_date(original_datetime):
+        new_datetime = datetime.strptime(original_datetime, '%Y-%m-%d')
+        tz = timezone.get_current_timezone()
+        timzone_datetime = timezone.make_aware(new_datetime, tz, True)
+        return timzone_datetime.date()
+
+def add_listing(request, job_id):
+        global message
+        print("add_listing geniousers_id",geniousers_id)
+        print("request.method:add_listing method:",request.method)
         if request.method=="POST":
-                        request.POST.get('btn_create_list')
-                        cancel=request.POST.get('btn_cancel')
+                if 'btn_create_list' in request.POST:
+                        print("request btn_create_list",request.method)
                         jobtitle=request.POST.get('job_title')
                         skill=request.POST.get('skills')
                         experience=request.POST.get('experience')
                         no_of_vacancies=request.POST.get('no_of_vacancies')
-                        expiration_date=request.POST.get('expiration_date')
-                        if 'btn_create_list' in request.POST:
-                                geniousers=GenioUsers()
-                                geniousers.id=geniousers_id
-                                job_listing_obj=Job_Listing(job_title=jobtitle,skills=skill,experience=experience,
-                                                        no_of_vacancies=no_of_vacancies,
-                                                        expiration_date=expiration_date,genio_user_id=geniousers)
-                                job_id=job_listing_obj.id
-                                job_listing_obj.save()
-                                message="Job added successfully."
-                                return render(request,"add_listing.html",{'message':message})
-                        if 'btn_cancel' in request.POST:
-                                message="Job Not added."
-                                return redirect("../employer_dashboard")        
-                                #return render(request, 'employer_dashboard.html', context)
-        else:        
-                return render(request,"add_listing.html")
-        
-def delete(request,id):
+                        new_date=request.POST.get('expiration_date')
+                        print("HIIIIIIIIII",new_date)
+
+                        geniousers=GenioUsers()
+                        geniousers.id=geniousers_id
+                        job_listing_obj=Job_Listing(job_title=jobtitle,skills=skill,experience=experience,
+                                                no_of_vacancies=no_of_vacancies,
+                                                expiration_date=new_date,genio_user_id=geniousers)
+                        job_listing_obj.save()
+                        message="Job added successfully."
+                        context={                       
+                        'functionality_name':"Create New",
+                        'message':message,
+                        'job':job_listing_obj,
+                        'experience_years':range(0, 41),
+                        }    
+                        return render(request,"add_listing.html",context)
+        elif request.method=="GET":
+                print("add_listing else GET")
+                if job_id==0:
+                        job=Job_Listing()
+                        func_name="Create New" 
+                else:
+                        job=Job_Listing.objects.get(pk=job_id)  
+                        func_name="Modify"  
+                        print("add_listing else GET date",job.expiration_date)  
+
+                message=""
+                context={
+                        'functionality_name':func_name,
+                        'message':message,
+                        'job':job,
+                        'experience_years':range(0, 41),
+                }
+              
+                print("add_listing else before render")
+                return render(request,'add_listing.html',context)
+        else:
+                print("add_listing outer else ")
+                message=""
+                context={
+                        'functionality_name':"Create New",
+                        'message':message,
+                        'experience_years':range(0, 41)
+                }   
+                print("add_listing outer else before render")
+                return render(request,"add_listing.html",context)
+
+def delete_job(request,id):
         #job=Job_Listing.objects.filter(id=request.session['jobs.id']).delete()
         print("in delete:", id)
         print("login_user_name",login_user_name)
@@ -258,4 +300,5 @@ def delete(request,id):
                 print("in message:", message)
                 return redirect("../employer_dashboard")
         return render(request,"employer_dashboard.html",{'message':message})
-        
+def employer_logout(request):
+        return render(request,"login.html",{'message':"Loggedout Here"})

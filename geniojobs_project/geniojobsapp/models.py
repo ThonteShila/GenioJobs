@@ -36,4 +36,5 @@ class Job_Listing(models.Model):
     no_of_vacancies=models.IntegerField(default=1)
     expiration_date=models.DateTimeField()
     genio_user_id=models.ForeignKey(GenioUsers,on_delete=models.CASCADE,default=0)
-    
+    def __str__(self):
+      return self.title 

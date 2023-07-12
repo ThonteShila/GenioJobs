@@ -31,8 +31,7 @@
                                 <div class="nav-link">Welcome, {{login_user_name}}</div>
                             </li>
                             <li class="nav-item active">
-                                <input type="submit" name="btnlogout" href="/home" value="Logout"
-                                    class="btn btn-info btn-md">
+                                <a name="employer_logout" class="btn btn-outline-dark float-right" href="/logout">Logout</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">About Us</a>
@@ -59,7 +58,7 @@
                         <h3>My Listing</h3>
                     </div>
                     <div class="col-sm-6">
-                        <a type="submit" name="addlisting" href="/add_listing" value="Create Listing"
+                        <a type="submit" name="addlisting" href="/add_listing/0" value="Create Listing"
                             class="btn btn-outline-primary float-right">Create Listing</a>
                     </div>
                 </div>
@@ -79,7 +78,7 @@
                     <tr>
                         <td>{{job.job_title}}</td>
                         <td>{{job.skills}}</td>
-                        <td><button type="submit" class="btn btn-success" name="btn_edit">Edit</button></td>
+                        <td><a class="btn btn-success" href="/add_listing/{{job.id}}" name="btn_edit">Edit</a></td>
                         <td><a class="btn btn-danger" href="/delete/{{job.id}}" name="btn_delete">
                                 Delete</a></td>
                     </tr>
