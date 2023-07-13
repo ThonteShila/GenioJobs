@@ -135,7 +135,13 @@ def jobseeker_login(request):
                                 login_success=False
                                 break
                 if login_success==True:
-                        return render(request,"jobseeker_dashboard.html",{'message':message})      
+                        request.session['login_success']=True
+                        request.session['geniousers_id']=geniouser.pk                         
+                        context={
+                                'message':message,
+                                'login_user_name':request.session['login_user_name']
+                        }
+                        return redirect('../jobseeker_dashboard',context)
                 else:
                         return render(request,"login.html",{'message':message})                              
         
@@ -210,7 +216,15 @@ def employer_dashboard(request):
                 return render(request,"employer_dashboard.html",context)
                         
 def jobseeker_dashboard(request):
-        return render(request,"jobseeker_dashboard.html")
+        if request.method=="POST":                
+                pass
+        else:   
+                job_listing=Job_Listing.objects.all()
+                context={
+                        'job_listing':job_listing,
+                        'login_user_name':request.session['login_user_name']
+                }
+        return render(request,"jobseeker_dashboard.html",context)
 
 
 #######################################################################################
