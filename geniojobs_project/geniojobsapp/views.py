@@ -216,9 +216,17 @@ def employer_dashboard(request):
                 return render(request,"employer_dashboard.html",context)
                         
 def jobseeker_dashboard(request):
-        if request.method=="POST":                
-                pass
-        else:   
+        print("1 jobseeker_dashboard method is:",request.method)
+        if request.method=="POST":
+                search_input=request.POST.get('search_input')
+                print("2 in search_input",search_input)    
+                job_listing=Job_Listing.objects.filter(job_title__icontains=search_input)
+                context={
+                        'job_listing':job_listing,
+                        'login_user_name':request.session['login_user_name']
+                }
+                return render(request,"jobseeker_dashboard.html",context)
+        elif request.method=="GET":          
                 job_listing=Job_Listing.objects.all()
                 context={
                         'job_listing':job_listing,
@@ -228,12 +236,6 @@ def jobseeker_dashboard(request):
 
 
 #######################################################################################
-
-def get_mytimezone_date(original_datetime):
-        new_datetime = datetime.strptime(original_datetime, '%Y-%m-%d')
-        tz = timezone.get_current_timezone()
-        timzone_datetime = timezone.make_aware(new_datetime, tz, True)
-        return timzone_datetime.date()
 
 def add_listing(request, job_id):
         global message
@@ -298,12 +300,8 @@ def add_listing(request, job_id):
                 return render(request,"add_listing.html",context)
 
 def delete_job(request,id):
-        #job=Job_Listing.objects.filter(id=request.session['jobs.id']).delete()
-        print("in delete:", id)
-        print("login_user_name",request.session['login_user_name'])
-        print("in request.method:", request.method)
         global message
-        message = "some msg"
+        message = ""
         if request.method=="GET":
                 job=Job_Listing.objects.get(pk=id).delete()              
                 print("in Get:", id)
@@ -311,6 +309,6 @@ def delete_job(request,id):
                 print("in message:", message)
                 return redirect("../employer_dashboard")
         return render(request,"employer_dashboard.html",{'message':message})
+
 def employer_logout(request):
-        #del request.session['employer_login']
         return render(request,"login.html",{'message':"Loggedout Here"})
