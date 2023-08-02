@@ -64,8 +64,11 @@ def stud_detail(request,first_name):
         return render(request,'stud_deatil.html',
                   {'stud': stud})
 def home(request):
-        print("inside home")
-        return render(request,'home.html',{})
+        return render(request,'home.html')
+def aboutus(request):
+        return render(request,'aboutus.html')
+def contactus(request):
+        return render(request,'contactus.html',{})
 def employer_login(request):        
         print("inside employer_login")
         data=Data()
