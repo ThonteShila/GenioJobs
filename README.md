@@ -27,3 +27,13 @@ Username (leave blank to use 's'): shila
 Email address: shila@gmail.com
 Password: shila@1
 Password (again):shila@1
+
+Job_seeler login:
+email-sk@gmail.com
+pass-sk
+
+###################################################
+Employeer login:
+email-shila@gmail.com
+pass-shila
+

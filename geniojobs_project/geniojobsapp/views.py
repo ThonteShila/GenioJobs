@@ -3,7 +3,7 @@ from django.forms import DateField, DateInput
 from django.shortcuts import redirect, render,get_object_or_404
 from django.template import RequestContext
 import pytz
-from geniojobsapp.models import Data,student,Grade,GenioUsers,Job_Listing
+from geniojobsapp.models import applied_jobs,Data,student,Grade,GenioUsers,Job_Listing,Job_Seeker_Profile
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
@@ -213,8 +213,7 @@ def employer_dashboard(request):
                         'job_listing':job_listing,
                         'login_user_name':request.session['login_user_name']
                 }
-                return render(request,"employer_dashboard.html",context)
-                        
+                return render(request,"employer_dashboard.html",context)                       
 def jobseeker_dashboard(request):
         print("1 jobseeker_dashboard method is:",request.method)
         if request.method=="POST":
@@ -233,8 +232,6 @@ def jobseeker_dashboard(request):
                         'login_user_name':request.session['login_user_name']
                 }
         return render(request,"jobseeker_dashboard.html",context)
-
-
 #######################################################################################
 
 def add_listing(request, job_id):
@@ -254,7 +251,8 @@ def add_listing(request, job_id):
                         geniousers.id=request.session['geniousers_id']
                         job_listing_obj=Job_Listing(job_title=jobtitle,skills=skill,experience=experience,
                                                 no_of_vacancies=no_of_vacancies,
-                                                expiration_date=new_date,genio_user_id=geniousers)
+                                                expiration_date=new_date,
+                                                genio_user_id=geniousers)
                         job_listing_obj.save()
                         message="Job added successfully."
                         
@@ -298,7 +296,6 @@ def add_listing(request, job_id):
                 }   
                 print("add_listing outer else before render")
                 return render(request,"add_listing.html",context)
-
 def delete_job(request,id):
         global message
         message = ""
@@ -309,6 +306,112 @@ def delete_job(request,id):
                 print("in message:", message)
                 return redirect("../employer_dashboard")
         return render(request,"employer_dashboard.html",{'message':message})
-
 def employer_logout(request):
-        return render(request,"login.html",{'message':"Loggedout Here"})
+        return redirect("../login",{'message':"Loggedout Here"})
+def my_profile(request,id):
+        print("id id ",id)
+        print("request.method:add_listing method:",request.method)
+        if request.method=="POST":
+                if 'btn_save_profile' in request.POST:
+                        skill=request.POST.get('skills')
+                        education=request.POST.get('education')
+                        percentage=request.POST.get('percentage')
+                        resume_attach=request.POST.get('resume_attach')
+                        cover_letter=request.POST.get('cover_letter')
+                        experience=request.POST.get('experience')
+                        geniousers=GenioUsers()
+                        geniousers.id=request.session['geniousers_id']
+                        print(request.session['geniousers_id'])
+                        job_listing_obj=Job_Seeker_Profile(skills=skill,education=education,percentage=percentage,
+                                                        resume=resume_attach,
+                                                        cover_letter=cover_letter,
+                                                        total_experience=experience,
+                                                        genio_user_id=geniousers)
+                        job_listing_obj.save()
+                        message="My profile added successfully."
+                        #List<string>education_list={'Post Graduation','Graduation','HSC','SSC'}
+                context={         
+                'login_user_name':request.session['login_user_name'],              
+                'message':message,
+                'job':job_listing_obj,
+                'experience_years':range(0, 41),
+                #'education_list':education_list
+                }    
+                return render(request,"myprofile.html",context)
+        elif request.method=="GET":
+                geniousers=GenioUsers()    
+                job=Job_Seeker_Profile.objects.all()
+                print(job)
+                for jobs in job:
+                        profile_data=True
+                        print("profile_data:",profile_data)
+                        print(jobs.skills)
+                        print(jobs.resume)
+                        request.session['geniousers_id']=geniousers.pk                       
+                education_list=["Post Graduate","graduate","HSC","SSC"]
+                context={
+                                'job':jobs,
+                                'login_user_name':request.session['login_user_name'],
+                                'experience_years':range(0, 41),
+                                'education_list':education_list
+                        }
+                return render(request,"myprofile.html",context)
+def apply_job(request,id):
+        global message
+        message = "One Job Applied"
+        if request.method=="GET":
+                print("in GET")
+                message="Successfully applied for job"
+                job=Job_Listing.objects.get(pk=id)  
+                Job_Profile=Job_Seeker_Profile.objects.get() 
+                applied_job=applied_jobs(job_listing_id=job,Job_Seeker_Profile_id=Job_Profile)
+                applied_job.save()
+                context={
+                                'login_user_name':request.session['login_user_name'],  
+                                'message':message,
+                                'job':job,
+                                'Job_Profile':Job_Profile
+                        }  
+                return render(request,"apply_job.html",context)
+        elif request.method=="POST":
+                print("in POST")
+                if 'btn_apply' in request.POST:
+                        message="One Job Applied"
+                        context={
+                                'login_user_name':request.session['login_user_name'],  
+                                'message':message,
+                                'job':job
+                        }
+                        return render(request,"apply_job.html",context)
+        else:
+                return render(request,"apply_job.html",{'message':message})
+def my_applications(request,id):   
+        message = "My Applications"
+        if request.method=="GET":
+                print("in GET")
+                message="My Applications"
+                job=Job_Listing.objects.filter(pk=id)  
+                Job_Profile=Job_Seeker_Profile.objects.get() 
+                applied_job=applied_jobs.objects.all()
+                for job in applied_job:
+                        print(job.job_listing_id)
+                context={
+                                'login_user_name':request.session['login_user_name'],  
+                                'message':message,
+                                'applied_job':applied_job,
+                                'job':job,
+                                'Job_Profile':Job_Profile
+                        }     
+                return render(request,"myapplictions.html",context)
+        elif request.method=="POST":
+                if 'my_applications' in request.POST:
+                        message="My applications"
+                        context={
+                                'login_user_name':request.session['login_user_name'],  
+                                'message':message
+                        }
+                        return render(request,"myapplictions.html",context)
+        else:
+                return render(request,"myapplictions.html",{'message':message})
+    
+

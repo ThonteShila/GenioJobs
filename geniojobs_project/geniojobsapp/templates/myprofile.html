@@ -1,0 +1,117 @@
+{%include 'loggedin_base.html'%}
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="justify-content-center align-items-center p-2">
+        <div class="row">
+            <div id="dashboard-box" class="col-md-6">
+                <h2>My Profile</h2>
+            </div>
+        </div>
+    </div>
+    <div id="my_profile-row" class="row justify-content-center">
+        <label class="text-primary">{{message}}</label>
+    </div>
+    <div class="container">
+        <div id="my_profile-row" class="row justify-content-center align-items-center">
+            <div id="my_profile-column" class="col-md-6">
+                <div id="my_profile-box" class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="skills">Required Skills</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control p-2" value="{{job.skills}}" id="skills" name="skills"
+                                    requires>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="education">Education</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control w-100" name="education">
+                                {% for edu in education_list %}
+                                {% if edu == job.education %}
+                                <option value="{{ edu }}" selected>{{ edu }}</option>
+                                {% else %}
+                                <option value="{{ edu }}">{{ edu }}</option>
+                                {% endif %}
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="percentage">Percentage</label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control p-2" value="{{job.percentage}}" placeholder="0%"
+                                id="percentage" name="percentage" requires>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="experience">Experience</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control" name="experience">
+                                {% for exp in experience_years %}
+                                {% if exp == job.experience %}
+                                <option value="{{ exp }}" selected>{{ exp }} Years</option>
+                                {% else %}
+                                <option value="{{ exp }}">{{ exp }} Years</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="Resume">Resume</label>
+                        </div>
+                        <div class="col-md-6">
+                            <section>
+                                <div class="action">
+                                    <div class="uploadContainer">
+                                        <input type="file" id="attachCV" value="{{job.resume_attach}}"
+                                            class="fileUpload wave-effect wave-light btn-larger" 
+                                            name="resume_attach">
+                                        <label>{{job.resume}}</label>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="cover_letter">Cover letter</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="wrap-txt-area">
+                                    <textarea id="cover_letter" class="materialize-textarea cover_letter"
+                                        placeholder="Type here..." rel="specialChar:validChar" 
+                                        maxlength="4000" value="{{job.cover_letter}}" name="cover_letter">{{job.cover_letter}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-md-12 center">
+                        <button type="submit" class="btn btn-dark" 
+                        name="btn_save_profile" href="">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    </div>
+</form>
+</body>

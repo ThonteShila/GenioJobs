@@ -1,0 +1,33 @@
+{%include 'loggedin_base.html'%}
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="container">
+        <label><h2>My Applications</h2></label>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Job_title</th>
+                    <th scope="col">Skills</th>
+                    <th scope="col">Resume</th>
+                    <th scope="col">Cover letter</th>
+                    <th scope="col">Is_pending</th>
+                    <th scope="col">Is_rejected</th>
+
+
+                </tr>
+            </thead>
+            {% for job in applied_job %}
+            <tbody>
+                <tr>
+                    <td>{{job.job_listing_id.job_title}}</td>
+                    <td>{{job.job_listing_id.skills}}</td>
+                    <td>{{job.Job_Seeker_Profile_id.resume}}</td>
+                    <td>{{job.Job_Seeker_Profile_id.cover_letter}}</td>
+                    <td>{{job.is_pending}}</td>
+                    <td>{{job.is_rejected}}</td>
+            </tbody>
+            {% endfor %}
+
+        </table>
+    </div>
+</form>
