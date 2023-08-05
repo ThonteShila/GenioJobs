@@ -1,6 +1,6 @@
 # GenioJobs
 Job searching portal, this web application developed as a part of below problem statement.
-Problem Statement:-![JobPortalProblemStatement](https://github.com/ThonteShila/GenioJobs/assets/121039923/8b2aa251-055a-479d-b07e-05b7bd2a9429)
+![JobPortalProblemStatement](https://github.com/ThonteShila/GenioJobs/assets/121039923/8b2aa251-055a-479d-b07e-05b7bd2a9429)
 -----------------------------------------------------------------------------------------
 This site is developed using
 - Django 3.2
