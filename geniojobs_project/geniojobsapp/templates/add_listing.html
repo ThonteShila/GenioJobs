@@ -1,0 +1,64 @@
+{%include 'loggedin_base.html'%}
+<form action="" method="POST">
+    {% csrf_token %}
+    <div id="create_listing">
+        <h1 class="text-center text-primary pt-2">
+            <span name="functionality_name" value="{{functionality_name}}">{{functionality_name}}</span><span>
+                Listing</span>
+        </h1>
+        <div id="create_listing-row" class="row justify-content-center">
+            <label class="text-primary">{{message}}</label>
+        </div>
+        <div class="container">
+            <div id="create_listing-row" class="row justify-content-center align-items-center">
+                <div id="create_listing-column" class="col-md-6">
+                    <div id="create_listing-box" class="col-md-12">
+                        <label for="job_title">Job Title</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control p-2" value="{{job.job_title}}" id="job_title"
+                                name="job_title" requires>
+                        </div>
+
+                        <label for="skills">Required Skills</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control p-2" value="{{job.skills}}" id="skills" name="skills"
+                                requires>
+                        </div>
+
+                        <label for="experience">Experience</label>
+                        <div>
+                            <select class="form-control w-100" name="experience">
+                                {% for exp in experience_years %}
+                                {% if exp == job.experience %}
+                                <option value="{{ exp }}" selected>{{ exp }} Years</option>
+                                {% else %}
+                                <option value="{{ exp }}">{{ exp }} Years</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <br>
+                        <label for="no_of_vacancies">No Of Vacancies</label>
+                        <div class="form-group">
+                            <input type="no_of_vacancies" class="form-control p-2" value="{{job.no_of_vacancies}}"
+                                id="no_of_vacancies" name="no_of_vacancies" requires>
+                        </div>
+
+                        <label for="expiration_date">Expiration date</label>
+                        <div class="form-group">
+                            <input type="date" class="form-control p-2" value="{{job.expiration_date|date:'Y-m-d'}}"
+                                id="expiration_date" name="expiration_date" requires>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-dark" name="btn_create_list" 
+                        href="/add_listing">{{functionality_name}}</button>
+                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                        <a class="btn btn-dark" name="btn_cancel" href="/employer_dashboard">Cancel</a>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>

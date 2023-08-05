@@ -1,0 +1,27 @@
+{%include 'loggedin_base.html'%}
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="justify-content-center align-items-center p-4">
+        <label class="text-primary">{{message}}</label>
+        <br>
+        <br>
+        <div class="justify-content-center align-items-center">
+            <label>Title :</label>
+            <input type="text" name="title" value=" {{job.job_title}}">
+        </div>
+        <div class="justify-content-center align-items-center">
+            <label>Skills :</label>
+            <input type="text" name="skills" value=" {{job.skills}}">
+        </div>
+        <div class="justify-content-center align-items-center">
+            <label>Resume :</label>
+            <input type="text" name="resume" value=" {{Job_Profile.resume}}">
+        </div>
+        <div class="justify-content-center align-items-center">
+            <label>Cover Letter :</label>
+            <input type="text" name="cover_letter" value=" {{Job_Profile.cover_letter}}">
+        </div>
+    </div>
+    <a class="btn btn-success"href="/my_applications/0" name="applications_btn">
+        My Applications</a>
+</form>
