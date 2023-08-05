@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container theme-showcase margin-top-navbar" role="main" style="margin-top: 50px">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                {% if stud is not None %}
+                <!-- employee detail information-->
+                <tr>
+                    <td>Id:</td>
+                    <td>{{ stud.id }}</td>
+                </tr>
+                <tr>
+                    <td>User name:</td>
+                    <td>{{ stud.first_name }}</td>
+                </tr>
+                <tr>
+                    <td>last name:</td>
+                    <td>{{ stud.last_name }}</td>
+                </tr>
+
+                {% else %}
+                <tr>
+                    <td>
+                        No employee data returned.
+                    </td>
+                </tr>
+                {% endif %}
+                </tbody>
+                {% for stud in stud_list %}
+                <tr>
+                    <td><input type="checkbox" id="stud_{{ stud.id }}" name="stud_{{ stud.id }}"></td>
+                    <td>{{ stud.id }}</td>
+                    <!-- Because you defined the emp_detail view has two parameter in the url, one is user_name, the other is mobile_number.So use Django url tag to render it. -->
+                    <td><a href="{% url 'stud_detail' first_name=stud.first_name%}">{{ stud.first_name }}</a></td>
+                    <th scope="row">1</th>
+                    <td>{{stud.first_name}}</td>
+                    <td>{{stud.last_name}}</td>
+                    <td>{{stud.stud_gender}}</td>
+                    <td>{{stud.stud_age}}</td>
+                    <td>{{stud.iscurrent}}</td>
+                    <td>{{stud.stud_grade}}</td>
+                </tr>
+                {% endfor % }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+</body>
+
+</html>

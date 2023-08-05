@@ -1,0 +1,69 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<body>
+    {%include 'base.html'%}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div id="Registation">
+            <h1 class="text-center text-primary pt-2">{{data.name}} Registation Form</h1>
+         
+            <div id="login-row" class="row justify-content-center">
+                <label class="text-primary">{{Passwordmessage}}</label>
+                <label class="text-primary">{{message}}</label>
+            </div>
+              <div class="container">
+                <div id="login-row" class="row justify-content-center align-items-center">
+                    <div id="login-column" class="col-md-6">
+                        <div id="login-box" class="col-md-12">
+                               
+                                <label for="Firstname">First name</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control p-2" 
+                                    id="Firstname" name="first_name" requires>
+                                </div>
+
+                                <label for="lastname">Last name</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control p-2" 
+                                    id="lastname" name="last_name" requires>
+                                </div>
+                                
+                                <label for="email">Email</label>
+                                <div class="form-group">
+                                    <input type="email" class="form-control p-2" 
+                                    id="email" name="email" requires>
+                                </div>
+
+                                <label for="password">Password</label>
+                                <div class="form-group">
+                                    <input type="password" class="form-control p-2" 
+                                    id="password" name="password" requires>
+                                </div>
+
+                                <label for="conformpassword">Conform Password</label>
+                                <div class="form-group">
+                                    <input type="password" class="form-control p-2" 
+                                    id="conformpassword" name="conform_password" requires>
+                                </div>
+                                {% if data.name == 'Employer' %}
+                                    <label for="organization_name">Organization Name</label>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control p-2" 
+                                        id="organizationname" name="organization_name" requires>
+                                    </div>
+                                {% endif %}                       
+                                <br>
+                                <button type="submit" class="btn btn-dark" 
+                                name="btnRegister" value="{{data.name}}">Register</button>
+                                <br>
+                                Already User? <a href="/re_login" name="relogin" >Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
